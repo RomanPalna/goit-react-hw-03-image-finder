@@ -11,6 +11,11 @@ export default class Searchbar extends Component {
 
   handleQuerySubmit = event => {
     event.preventDefault();
+
+    if (this.state.query.trim() === '') {
+      alert('Введите поисковый запрос!');
+      return;
+    }
     this.props.onSubmit(this.state.query);
 
     this.setState({ query: '' });
