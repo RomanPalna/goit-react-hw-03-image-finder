@@ -1,6 +1,7 @@
 import { Component } from 'react';
+
 import Searchbar from '../Searchbar/Searchbar';
-import imageApi from '../services/ImageApi';
+import ImageGaleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
 const Status = {
   IDLE: 'idle',
@@ -26,7 +27,9 @@ export default class ImageGalerry extends Component {
     return (
       <div>
         <Searchbar onSubmit={this.hanleSearchbarSubmit} />
-        <ul className="ImageGallery"></ul>
+        <ul className="ImageGallery">
+          <ImageGaleryItem query={this.state.query} />
+        </ul>
       </div>
     );
   }

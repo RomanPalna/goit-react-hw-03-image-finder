@@ -3,7 +3,7 @@ const API_URL = 'https://pixabay.com/api/';
 
 function fetchImages(query) {
   const searchParams = new URLSearchParams({
-    api_key: API_KEY,
+    key: API_KEY,
     q: query,
     page: 1,
     per_page: 12,
@@ -13,7 +13,7 @@ function fetchImages(query) {
 
   const url = `${API_URL}?${searchParams}`;
 
-  fetch(url).then(response => {
+  return fetch(url).then(response => {
     if (response.ok) {
       return response.json();
     }

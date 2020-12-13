@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { toast } from 'react-toastify';
 
 export default class Searchbar extends Component {
   state = {
@@ -13,7 +14,7 @@ export default class Searchbar extends Component {
     event.preventDefault();
 
     if (this.state.query.trim() === '') {
-      alert('Введите поисковый запрос!');
+      toast.error('Введите поисковый запрос!');
       return;
     }
     this.props.onSubmit(this.state.query);
