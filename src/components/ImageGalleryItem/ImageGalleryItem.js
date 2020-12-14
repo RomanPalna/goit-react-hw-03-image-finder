@@ -4,23 +4,30 @@ import imageApi from '../services/ImageApi';
 export default class ImageGaleryItem extends Component {
   state = {
     query: null,
+    images: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.query !== this.state.query) {
-      imageApi
-        .fetchImages(this.state.query)
-        .then(query => this.setState({ query }));
+    if (this.state.query !== prevProps.query) {
+      this.fetchImg(this.state.query);
+      console.log(this.state.images);
+      return;
     }
+  }
+
+  async fetchImg() {
+    return imageApi
+      .fetchImages(this.state.query)
+      .then(img => this.setState({ images: [...img.hits] }));
   }
 
   render() {
     return (
       <>
-        {hits.map(hit => (
-          <li key={hit.id} className="ImageGalleryItem">
+        {this.state.images.map(image => (
+          <li key={image.id} className="ImageGalleryItem">
             <img
-              src={hit.webformatUrl}
+              src={image.webformatUrl}
               alt=""
               className="ImageGalleryItem-image"
             />
@@ -30,3 +37,5 @@ export default class ImageGaleryItem extends Component {
     );
   }
 }
+
+// images => this.setState({ images: [...images] });

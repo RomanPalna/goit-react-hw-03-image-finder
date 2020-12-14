@@ -1,7 +1,7 @@
 const API_KEY = '19045018-7ef62a7ed2607017cbe478eaf';
 const API_URL = 'https://pixabay.com/api/';
 
-function fetchImages(query) {
+async function fetchImages(query) {
   const searchParams = new URLSearchParams({
     key: API_KEY,
     q: query,
@@ -13,13 +13,18 @@ function fetchImages(query) {
 
   const url = `${API_URL}?${searchParams}`;
 
-  return fetch(url).then(response => {
-    if (response.ok) {
-      return response.json();
-    }
+  const fetchImg = await fetch(url);
+  const images = await fetchImg.json();
 
-    return Promise.reject(new Error(`Нет изображения с именем ${query}`));
-  });
+  return images;
+
+  // return fetch(url).then(response => {
+  //   if (response.ok) {
+  //     return response.json().then(hits => hits);
+  //   }
+
+  //   return Promise.reject(new Error(`Нет изображения с именем ${query}`));
+  // });
 }
 
 const imageApi = { fetchImages };
