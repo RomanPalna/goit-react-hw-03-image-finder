@@ -8,10 +8,10 @@ export default class ImageGaleryItem extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.query !== prevProps.query) {
+    if (this.props.query !== prevProps.query) {
       this.fetchImg(this.state.query);
+
       console.log(this.state.images);
-      return;
     }
   }
 
@@ -27,8 +27,8 @@ export default class ImageGaleryItem extends Component {
         {this.state.images.map(image => (
           <li key={image.id} className="ImageGalleryItem">
             <img
-              src={image.webformatUrl}
-              alt=""
+              src={image.webformatURL}
+              alt={image.tags}
               className="ImageGalleryItem-image"
             />
           </li>
