@@ -1,15 +1,83 @@
-import ImageGalerry from './components/ImageGallery/ImageGallery';
+import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import Button from './components/Button/Button';
+import imageApi from './components/services/ImageApi';
+import Searchbar from './components/Searchbar/Searchbar';
+import ImageGalerry from './components/ImageGallery/ImageGallery';
+import Modal from './components/Modal/Modal';
 
-function App() {
-  return (
-    <div>
-      <ImageGalerry />
-      <ToastContainer autoclose={3000} />
-    </div>
-  );
+class App extends Component {
+  state = {
+    images: [],
+    page: 1,
+    query: null,
+    modalImage: [],
+    modalImageID: null,
+    openModal: false,
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.query !== this.state.query) {
+      this.fetchImg();
+    }
+  }
+
+  onSearch = query => {
+    this.setState({ query, images: [], page: 1 });
+  };
+
+  fetchImg() {
+    const { query, page } = this.state;
+    return imageApi.fetchImages(query, page).then(img =>
+      this.setState({
+        images: [...img.hits],
+        page: this.state.page + 1,
+      }),
+    );
+  }
+
+  onOpenModal = e => {
+    this.setState({
+      openModal: true,
+      modalImageID: Number(e.currentTarget.id),
+    });
+  };
+
+  closeModal = () => {
+    this.setState({ openModal: false });
+  };
+
+  imageFind = () => {
+    const largeImg = this.state.images.find(image => {
+      return image.id === this.state.modalImageID;
+    });
+
+    return largeImg;
+  };
+
+  render() {
+    console.log(this.state.images);
+
+    return (
+      <>
+        <Searchbar onSubmit={this.onSearch} />
+        <ImageGalerry openModal={this.onOpenModal} images={this.state.images} />
+        ,
+        <Button fetchImages={this.fetchImg} />,
+        <ToastContainer autoclose={3000} />
+        {this.state.openModal && (
+          <Modal id={this.state.modalImageID} onClose={this.closeModal}>
+            <img
+              src={this.imageFind().largeImageURL}
+              alt={this.imageFind().tags}
+            ></img>
+          </Modal>
+        )}
+      </>
+    );
+  }
 }
 
 export default App;
