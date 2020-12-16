@@ -19,7 +19,10 @@ class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !== this.state.query) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
       this.fetchImg();
     }
   }
@@ -38,8 +41,7 @@ class App extends Component {
   }
 
   loadMore = () => {
-    this.setState({ page: this.state.page + 1 });
-    this.fetchImg();
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   onOpenModal = e => {
