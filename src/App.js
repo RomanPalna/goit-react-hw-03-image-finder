@@ -29,14 +29,18 @@ class App extends Component {
   };
 
   fetchImg() {
-    const { query, page } = this.state;
-    return imageApi.fetchImages(query, page).then(img =>
+    const { query } = this.state;
+    return imageApi.fetchImages(query).then(img =>
       this.setState({
-        images: [...img.hits],
-        page: this.state.page + 1,
+        images: [...img.hits, img],
       }),
     );
   }
+
+  loadMore = () => {
+    this.setState({ page: this.state.page + 1 });
+    this.fetchImg();
+  };
 
   onOpenModal = e => {
     this.setState({
@@ -65,7 +69,7 @@ class App extends Component {
         <Searchbar onSubmit={this.onSearch} />
         <ImageGalerry openModal={this.onOpenModal} images={this.state.images} />
         ,
-        <Button fetchImages={this.fetchImg} />,
+        <Button fetchImages={this.loadMore} />,
         <ToastContainer autoclose={3000} />
         {this.state.openModal && (
           <Modal id={this.state.modalImageID} onClose={this.closeModal}>
