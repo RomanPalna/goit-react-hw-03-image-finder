@@ -14,7 +14,7 @@ export default class Searchbar extends Component {
     event.preventDefault();
 
     if (this.state.query.trim() === '') {
-      toast.error('Введите поисковый запрос!');
+      toast.error('Самурай! Напиши запрос!');
       return;
     }
     this.props.onSubmit(this.state.query);

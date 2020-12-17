@@ -6,7 +6,7 @@ async function fetchImages(query, page) {
     key: API_KEY,
     q: query,
     page: page,
-    per_page: 20,
+    per_page: 12,
     image_type: 'photo',
     orientation: 'horizontal',
   });

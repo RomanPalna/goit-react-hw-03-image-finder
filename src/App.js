@@ -7,6 +7,7 @@ import imageApi from './components/services/ImageApi';
 import Searchbar from './components/Searchbar/Searchbar';
 import ImageGalerry from './components/ImageGallery/ImageGallery';
 import Modal from './components/Modal/Modal';
+import LoaderSpin from './components/Loader/Loader';
 
 class App extends Component {
   state = {
@@ -16,6 +17,7 @@ class App extends Component {
     modalImage: [],
     modalImageID: null,
     openModal: false,
+    isLoading: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,12 +34,26 @@ class App extends Component {
   };
 
   fetchImg() {
-    const { query } = this.state;
-    return imageApi.fetchImages(query).then(img =>
-      this.setState({
-        images: [...img.hits, img],
-      }),
-    );
+    const { query, page, images } = this.state;
+    this.setState({ isLoading: true });
+    imageApi
+      .fetchImages(query, page)
+      .then(img =>
+        this.setState({
+          images: [...images, ...img.hits],
+          page: page,
+        }),
+      )
+      .catch(error => {
+        throw new Error(error);
+      })
+      .finally(
+        this.setState({ isLoading: false }),
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        }),
+      );
   }
 
   loadMore = () => {
@@ -70,7 +86,7 @@ class App extends Component {
       <>
         <Searchbar onSubmit={this.onSearch} />
         <ImageGalerry openModal={this.onOpenModal} images={this.state.images} />
-        ,
+        {this.state.isLoading && <LoaderSpin />}
         <Button fetchImages={this.loadMore} />,
         <ToastContainer autoclose={3000} />
         {this.state.openModal && (
