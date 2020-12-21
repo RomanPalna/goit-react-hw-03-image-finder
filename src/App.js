@@ -87,7 +87,7 @@ class App extends Component {
         <Searchbar onSubmit={this.onSearch} />
         <ImageGalerry openModal={this.onOpenModal} images={this.state.images} />
         {this.state.isLoading && <LoaderSpin />}
-        <Button fetchImages={this.loadMore} />,
+        <Button fetchImages={this.loadMore} />
         <ToastContainer autoclose={3000} />
         {this.state.openModal && (
           <Modal id={this.state.modalImageID} onClose={this.closeModal}>
